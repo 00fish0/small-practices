@@ -10,6 +10,13 @@ namespace key_bot_game {
             case PlayerType::CAR:
                 this->speed = 2;
                 break;
+            case PlayerType::NINJA:
+                this->speed = 1;
+                break;
+            case PlayerType::ENDERMAN:
+                this->speed = 1;
+                break;
+                
         }
     }
 

@@ -9,21 +9,34 @@ namespace key_bot_game {
     bool Run::run() {
         // welcome
         std::cout << "Welcome to KeyBotGame!" << std::endl;
-        std::cout << "Please input the player type (0 for walk, 1 for car): ";
+        std::cout << "Input -1 for exit\nPlease input the player type (0 for walk, 1 for car, 2 for ninja(wall-passer), 3 for enderman): ";
         int playerType;
         std::cin >> playerType;
-        if (playerType != 0 && playerType != 1) {
+        // getchar();
+        if (playerType!=-1 && playerType!= 0 && playerType != 1 && playerType != 2 && playerType != 3) {
             std::cout << "Wrong input! Try again!" << std::endl;
             return false;
         }
+        if(playerType==-1){
+            std::cout<< "Game exit."<<std::endl;
+            return true;
+        }
+
         std::cout << "Type wasd to move and q to exit the game, others to wait" << std::endl;
         std::cout << "Enter to start..." << std::endl;
         std::cin.get();
 
         // init map
-        auto playerPosition = Utils::getRandomPosition(MAP_SIZE);
-        auto thiefPosition = Utils::getRandomPosition(MAP_SIZE);
-        auto exitPosition = Utils::getRandomPosition(MAP_SIZE);
+        std::cout<< "Please input the size of the map.(less than 40)"<<std::endl;
+        std::cin>>mapSize;
+        if(mapSize<5 || mapSize>40){
+            std::cout<< "Wrong input! Try again!" << std::endl;
+            return false;
+        }
+
+        auto playerPosition = Utils::getRandomPosition(mapSize);
+        auto thiefPosition = Utils::getRandomPosition(mapSize);
+        auto exitPosition = Utils::getRandomPosition(mapSize);
         pMap = std::make_unique<Map>(playerPosition, PlayerType(playerType), thiefPosition, exitPosition);
         pMap->drawMap();
 
@@ -37,12 +50,17 @@ namespace key_bot_game {
                 return true;
             }
 
+            else if (key == 'f') {
+                pMap->playerSkill();
+            }
+
             // move the player
-            pMap->playerMove(Utils::getMoveDirection(key));
+            else pMap->playerMove(Utils::getMoveDirection(key));
 
             // check if win
             if (checkWin()) {
-                return true;
+                pMap->getScore();
+                return false;
             }
 
             // move the thief
@@ -50,12 +68,14 @@ namespace key_bot_game {
 
             // check if lose
             if (checkLose()) {
-                return true;
+                pMap->getScore();
+                return false;
             }
 
             // もう一度 check if win
             if (checkWin()) {
-                return true;
+                pMap->getScore();
+                return false;
             }
 
         }
@@ -66,6 +86,7 @@ namespace key_bot_game {
         if (pMap->ifWin()) {
             std::cout << std::endl;
             std::cout << "You catch the thief!" << std::endl;
+            pMap->playerPlusScore();
             return true;
         }
         return false;
@@ -76,6 +97,7 @@ namespace key_bot_game {
         if (pMap->ifLose()) {
             std::cout << std::endl;
             std::cout << "Thief has escaped!" << std::endl;
+            pMap->thiefPlusScore();
             return true;
         }
         return false;

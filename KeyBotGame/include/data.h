@@ -6,14 +6,16 @@
 #define KEYBOTGAME_DATA_H
 
 namespace key_bot_game {
-    constexpr int MAP_SIZE = 20;
+    constexpr int MAP_MAX_SIZE = 40;
+    extern int mapSize;
 
     enum class PointType {
         EMPTY = 0,
         WALL = 1,
         PLAYER = 2,
         THIEF = 3,
-        EXIT = 4
+        EXIT = 4,
+        PLAYER_IN_WALL = 5
     };
 
     enum class MoveDirection {
@@ -27,6 +29,8 @@ namespace key_bot_game {
     enum class PlayerType {
         WALK = 0,
         CAR = 1,
+        NINJA = 2,
+        ENDERMAN = 3
     };
 
     struct Position {

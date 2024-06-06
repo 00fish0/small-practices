@@ -1,6 +1,6 @@
 //
 // Created by SeparateWings on 9/27/23.
-//
+//i
 
 #ifndef KEYBOTGAME_MAP_H
 #define KEYBOTGAME_MAP_H
@@ -18,10 +18,13 @@ namespace key_bot_game {
     class Map {
 
     private:
-        Point map[MAP_SIZE][MAP_SIZE];
+        Point map[MAP_MAX_SIZE][MAP_MAX_SIZE];
         Position exitPosition;
         Player player;
         Thief thief;
+        
+        static int playerScore;
+        static int thiefScore;
 
         const int LOSE_DISTANCE = 1;
 
@@ -42,14 +45,24 @@ namespace key_bot_game {
 
         void playerMove(MoveDirection moveDirection);
 
+        void playerSkill();
+
         // return true if win
         bool ifWin() const;
 
         // return true if lose
         bool ifLose() const;
 
+        void getScore();
+
+        static void playerPlusScore();
+
+        static void thiefPlusScore();
+
     };
 
+
 } // namespace key_bot_game
+
 
 #endif //KEYBOTGAME_MAP_H
